@@ -1,0 +1,104 @@
+#include <iostream>
+#include <string>
+#include "stdlib.h"
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <stack>
+#include <utility>
+
+using namespace std;
+
+int main() {
+    vector<string> strings;
+    string k=" ";
+
+    while(k !="") {
+        getline(cin, k);
+        strings.push_back(k);
+    }
+    strings.pop_back();
+    
+    unordered_map<string, stack<int>> n;
+    stack<unordered_set<string>> variable;
+    variable.push(unordered_set<string>());
+
+    for(int i=0; i<strings.size(); i++) {
+        if(strings[i]=="{") {
+            variable.push(unordered_set<string>());
+        }
+        else if(strings[i]=="}") {
+            for(auto c:variable.top() ) {
+                n.find(c)->second.pop();
+                if(n.find(c)->second.empty()) {
+                    n.erase(n.find(c));
+                }
+            }
+            variable.pop();
+        }
+        else {
+            string l="";
+            int j=0;
+            for( ; j<strings[i].size(); j++){
+                if(strings[i][j]=='='){
+                    break;
+                }
+                l+=strings[i][j];
+            }
+            string s="";
+            j=j+1;
+            for(; j<strings[i].size(); j++){
+                s+=strings[i][j];
+
+            }
+            int number= atoi(s.c_str());
+            if(number!=0 || s=="0"){
+                if(n.find(l) !=n.end()) {
+                    if(variable.top().find(l) != variable.top().end()) {
+                        n.find(l)->second.pop();
+                        n.find(l)->second.push(number);
+                    }
+                    else {
+                        n.find(l)->second.push(number);
+                        variable.top().insert(l);
+                    }
+                }
+                else {
+                    n.insert(pair<string,stack<int>>(l, stack<int>()));
+                    n.find(l)->second.push(number);
+                    variable.top().insert(l);
+                }
+            }
+
+            else {
+
+                if(n.find(s) == n.end()){
+                    n.insert(pair<string,stack<int>>(s, stack<int>()));
+                    n.find(s)->second.push(0);
+                    variable.top().insert(s);
+                }
+                int value=n.find(s)->second.top();
+                if(n.find(l) !=n.end()) {
+                    if(variable.top().find(l) != variable.top().end()) {
+                        n.find(l)->second.pop();
+                        n.find(l)->second.push(value);
+                    }
+                    else {
+                        n.find(l)->second.push(value);
+                        variable.top().insert(l);
+                    }
+                }
+                else {
+                    n.insert(pair<string,stack<int>>(l, stack<int>()));
+                    n.find(l)->second.push(value);
+                    variable.top().insert(l);
+                }
+
+                cout <<value<<endl;
+            }
+        }
+    }
+
+
+}
+
