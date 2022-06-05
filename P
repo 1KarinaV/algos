@@ -1,0 +1,63 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+const int inf = 1e9;
+vector<vector<int>> graph;
+vector<char> keys;
+
+void DFS(const int a, vector<vector<int>>const &graph, vector<char>& keys, const bool reverse, const int length, int& cnt) {
+    keys[a] = 1;
+    cnt++;
+    for (int i = 0; i < graph.size(); i++) {
+        int avl;
+        avl = (reverse ? graph[i][a] : graph[a][i]);
+        if (avl <= length && keys[i] == 0) {
+            DFS(i, graph, keys, reverse, length, cnt);
+        }
+    }
+}
+
+
+bool CON(int length, const int n, vector<vector<int>>  const& graph) {
+    int cnt = 0;
+    int cnt_back = 0;
+    vector<char> keys(n, 0);
+    vector<char> keys_reverse(n, 0);
+
+    int s =0;
+    DFS(s, graph, keys, false, length, cnt);
+    if (cnt == n) {
+        DFS(s, graph, keys_reverse, true, length, cnt_back);
+        return (cnt_back == cnt);
+    }
+    return false;
+}
+
+
+
+int main() {
+    int min_length = inf;
+    int n;
+    cin >> n;
+    vector<vector<int>> graph(n, vector<int>(n));
+    for (vector<int> &row : graph) {
+        for (int & a : row) {
+            cin >> a;
+            min_length = min(min_length, a);
+        }
+    }
+    int j = min_length - 1;
+    int l = j;
+    int r = inf - 1;
+    while (r - l > 1) {
+        int mid = (l + r) / 2;
+        if (!CON(mid, n, graph)) {
+            l = mid;
+        } else {
+            r = mid;
+        }
+    }
+    cout << r;
+    return 0;
+}
