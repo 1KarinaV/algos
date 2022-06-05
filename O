@@ -1,0 +1,59 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace  std;
+
+
+char change_keys(char keys) {
+    if (keys !=1){
+        keys = 1;
+        return keys;
+    }
+    else {
+        keys = 2;
+        return keys;
+    }
+}
+
+bool DFS(int a, vector<vector<int>>const& graph, int *key, char keys) {
+    key[a] = keys;
+    for (int i: graph[a]) {
+        if(key[i] == 0) {
+            if (!DFS(i, graph, key, change_keys(keys))) {
+                return false;
+            }
+        }
+            else if (key[i] == keys) {
+                return  false;
+            }
+        }
+    return true;
+}
+
+int main() {
+    int n, p;
+    cin >>n>>p;
+
+    vector <vector<int>> graph(n);
+    int * key = new int[n];
+
+    for(int i=0; i<p ;i++){
+        int from, to;
+        cin >> from>>to;
+        graph[to-1].push_back(from-1);
+        graph[from-1].push_back(to-1);
+    }
+    bool answ = DFS(0, graph, key, 1);
+    for(int i=0; i<n ;i++){
+        if (key[i] == 0 && answ) {
+            answ = (answ & DFS(i, graph, key, 1));
+        }
+        }
+    if (!answ){
+        cout << "NO";
+    }
+    else{
+        cout<< "YES";
+    }
+
+}
