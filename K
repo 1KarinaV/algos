@@ -1,0 +1,56 @@
+#include <iostream>
+#include <map>
+#include <iterator>
+#include <queue>
+using namespace std;
+
+int main()
+{
+    int n, m;
+    cin >> n >> m;
+    map<int, int> mp;
+    deque<int> res;
+    int* array=new int [m];
+
+    for(int j = 0; j < m; ++j){
+        cin >> array[j];
+        if(array[j] > 0){
+            bool b = false;
+            int index= -1;
+            if(mp.empty()){
+                mp[1]=array[j];
+                index = 1;
+                b=true;
+            }
+            else{
+                for(auto i = mp.begin(), k =++mp.begin(); k != mp.end(); i++, k++){
+                    int diff = k->first - i->first - i->second;
+
+                    if(diff >= array[j]){
+                        b = true;
+                        mp[i->first+i->second] = array[j];
+                        index = i->first+i->second;
+                        break;
+                    }
+                }
+                auto e = --mp.end() ;
+                if((n - e->first - e->second) >= array[j] && b==false){
+                    mp[e->first + e->second] = array[j];
+                    index = e->first + e->second;
+
+                }
+            }
+            res.push_back(index);
+            array[j] = index;
+        }
+        else {
+            if(array[abs(array[j])-1] != -1){
+                mp.erase(array[abs(array[j])-1]);
+            }
+        }
+    }
+    for(auto i: res){
+        cout << i << endl;
+    }
+    return 0;
+}
