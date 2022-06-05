@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+#include <set>
+
+using namespace std;
+int main() {
+    int k_shelf, max_floor, s_count, cnt=0;
+    cin >> k_shelf >> max_floor >> s_count;
+
+    vector<int>car_numbers;
+    car_numbers.resize(k_shelf);
+    fill(car_numbers.begin(), car_numbers.end(), s_count+1);
+    vector<int>next;
+    next.resize(s_count);
+    fill(next.begin(), next.end(), s_count+1);
+    for(int i=0; i<s_count; i++){
+        int index;
+        cin >>index;
+        if(car_numbers[index-1] != s_count+1){
+            next[car_numbers[index-1]] = i;
+            car_numbers[index-1] = i;
+        }
+        else{
+            car_numbers[index-1] = i;
+        }
+    }
+    set<int>car_floor;
+    for(int i=0; i<s_count; i++){
+        if(car_floor.size()<max_floor){
+            if(car_floor.find(i)==car_floor.end()){
+                car_floor.insert(next[i]);
+                cnt++;
+            }
+            else{
+                car_floor.erase(i);
+                car_floor.insert(next[i]);
+            }
+        }
+        else{
+            if(car_floor.find(i)==car_floor.end()){
+                car_floor.erase(*car_floor.rbegin());
+                car_floor.insert(next[i]);
+                cnt++;
+            }
+            else{
+                car_floor.erase(i);
+                car_floor.insert(next[i]);
+            }
+
+        }
+
+    }
+    cout<< cnt;
+}
