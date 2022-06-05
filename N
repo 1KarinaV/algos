@@ -1,0 +1,44 @@
+#include <iostream>
+
+using namespace std;
+
+void DFS(int i, int **graph, int *key, int n ){
+    key[i]=1;
+    for(int j=0; j<n; j++){
+        if(graph[i][j]!=0 && key[j]==0){
+            DFS(j, graph, key,  n  );
+        }
+    }
+
+}
+
+int main() {
+    int n;
+    cin >>n;
+
+    int ** graph = new int * [n];
+    int * key = new int[n];
+    for(int i=0; i < n; i++){
+        graph[i]= new int [n];
+        for(int j=0; j<n; j++){
+            graph[i][j]=0;
+        }
+        key[i]=0;
+    }
+    for(int i=0; i<n ;i++){
+        int tmp;
+        cin >> tmp;
+        graph[i][tmp-1]++;
+        graph[tmp-1][i]++;
+    }
+
+    int count = 0;
+    for(int i=0; i<n ;i++){
+        if(key[i]==0){
+            DFS(i, graph, key, n);
+            count++;
+        }
+    }
+    cout<<count;
+
+}
