@@ -1,0 +1,34 @@
+#include <iostream>
+#include <deque>
+
+using namespace std;
+
+int main()
+{
+    int n, k;
+    cin >> n >> k;
+    deque<int> a(n), res;
+    for(int i = 0; i < n; ++i){
+        cin >> a[i];
+    }
+    for(int i = 0; i < k; ++i){
+        res.push_back(a[i]);
+        while(res.size() > 1 && res[res.size() - 1] < res[res.size() - 2]){
+            res.erase(res.begin() + res.size() - 2);
+        }
+    }
+    int i = 0;
+    cout << res[0] << " ";
+    for(int i = k; i < a.size(); ++i){
+        if(res[0] == a[i - k] || res.size() > k){
+            res.erase(res.begin());
+        }
+        res.push_back(a[i]);
+        while(res.size() > 1 && res[res.size() - 1] < res[res.size() - 2]){
+            res.erase(res.begin() + res.size() - 2);
+        }
+        cout << res[0] << " ";
+    }
+    return 0;
+}
+
