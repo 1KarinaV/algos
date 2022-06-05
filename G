@@ -1,0 +1,42 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+struct Weight_letter{
+    int weight;
+    char letter;
+};
+bool pr (Weight_letter &lhs, Weight_letter &rhs){
+    return lhs.weight > rhs.weight;
+}
+int main() {
+    string s;
+    cin>>s;
+
+    vector<Weight_letter> weights;
+
+    for(char i='a'; i<='z'; i++){
+        Weight_letter wl;
+        cin >> wl.weight;
+        wl.letter = i;
+        weights.push_back(wl);
+    }
+    sort(weights.begin(), weights.end(), pr);
+
+    string str="";
+    for(auto k:weights){
+        int cnt = count(s.begin(), s.end(), k.letter);
+        if(cnt>=2){
+            str+=k.letter;
+            s.erase(s.find(k.letter), 1);
+            s.erase(s.find(k.letter), 1);
+        }
+    }
+    string str2=str;
+    std::reverse(str2.begin(), str2.end());
+    str+=s+str2;
+    cout<<str;
+}
