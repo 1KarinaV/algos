@@ -1,0 +1,22 @@
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+int main() {
+    int n, k;
+    int result = 0;
+    cin >> n >> k;
+    int *price = new int[n];
+    for (int i = 0; i < n; i++) {
+        cin >> price[i];
+        result+=price[i];
+    }
+    sort(price, price+n);
+
+
+    for (int i = 0;i<n/k;i++){
+        int temp=n-k*(i+1);
+        result = result - price[temp];
+    }
+        cout << result;
+    }
