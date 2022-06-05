@@ -41,5 +41,6 @@ for (int i = 0; i < k; i++) {
             maxend = end;
         }
     }
+    
     cout << maxstart + 1 << " " << maxend + 1;
 }
